@@ -1,3 +1,4 @@
+//变量 （https://dart.cn/guides/language/language-tour#variables）
 void name_var(){
   var name = 'Bob';
   print('value of name is ${name}');
