@@ -1,40 +1,37 @@
 //变量
 //(https://dart.cn/guides/language/language-tour#variables)
-
-void default_value(){
+void default_value() {
+  //assert只能在调式模式作用，assert(condition)将会在条件判断为false时抛出一个异常。
+  //未初始化以及可空类型的变量拥有一个默认的初始值 null
   int? lineCount;
-  //assert() 的调用将会在生产环境的代码中被忽略掉。在开发过程中，assert(condition) 将会在 条件判断 为 false 时抛出一个异常。
-  assert(lineCount == null);
-
-  int lineCount1 = 0;
-  assert(lineCount1==0);
+  assert(lineCount == 0);
 }
 
 late String description;
-void late_variables(){
+void late_variables() {
   description = 'LateString!';
   print("LateString!");
 }
 
 //实例变量 可以是 final 的但不可以是 const
-void final_and_const(){
+void final_and_const() {
+  //a final variable can only be set once.
   final name = 'Bob'; // Without a type annotation
   final String nickname = 'Bobby';
-  //a final variable can only be set once.
 
-  //如果使用 const 修饰类中的变量，则必须加上 static 关键字，即 static const
-  const bar = 1000000; // Unit of pressure (dynes/cm2)
-  const double atm = 1.01325 * bar; // Standard atmosphere
+  //在声明 const 变量时可以直接为其赋值，也可以使用其它的 const 变量为其赋值
+  const bar = 1000000;
+  const double atm = 1.01325 * bar;
 
+  //没有使用 final 或 const 修饰的变量的值是可以被更改的，即使这些变量之前引用过 const 的值
+  //Constant variables can't be assigned a value
   var foo = const [];
   final bar1 = const [];
-  const baz = []; // Equivalent to `const []`
-                  //Constant variables can't be assigned a value
-
-  foo = [1, 2, 3]; // Was const []
+  const baz = [];
+  foo = [1, 2, 3];
 }
 
-void main(){
+void main() {
   default_value();
   late_variables();
   final_and_const();

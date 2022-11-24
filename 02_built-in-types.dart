@@ -2,7 +2,7 @@
 //(https://dart.cn/guides/language/language-tour#built-in-types)
 
 //Dart 支持两种 Number 类型:int 和 double
-void numbers(){
+void numbers() {
   //(1)整数是不带小数点的数字
   var x = 1;
   var hex = 0xDEADBEEF;
@@ -12,7 +12,7 @@ void numbers(){
   var exponents = 1.42e5;
 
   // (3)x can have both int and double values
-  num x1 = 1; 
+  num x1 = 1;
   x1 += 2.5;
 
   //(4)整型字面量将会在必要的时候自动转换成浮点数字面量
@@ -46,7 +46,7 @@ void numbers(){
   const msUntilRetry = secondsUntilRetry * msPerSecond;
 }
 
-void strings(){
+void strings() {
   //使用单引号或者双引号来创建字符串
   var s1 = 'Single quotes work well for string literals.';
   var s2 = "Double quotes work just as well.";
@@ -55,13 +55,15 @@ void strings(){
 
   //在字符串中，请以 ${表达式} 的形式使用表达式，如果表达式是一个标识符，可以省略掉 {}。如果表达式的结果为一个对象，则 Dart 会调用该对象的 toString 方法来获取一个字符串
   var s = 'string interpolation';
-  assert('Dart has $s, which is very handy.' == 'Dart has string interpolation, ''which is very handy.');
-  assert('That deserves all caps. ''${s.toUpperCase()} is very handy!' =='That deserves all caps. ''STRING INTERPOLATION is very handy!');
+  assert('Dart has $s, which is very handy.' ==
+      'Dart has string interpolation, ' 'which is very handy.');
+  assert('That deserves all caps. ' '${s.toUpperCase()} is very handy!' ==
+      'That deserves all caps. ' 'STRING INTERPOLATION is very handy!');
 
   //使用 + 运算符或并列放置多个字符串来连接字符串
   var s5 = 'String '
-    'concatenation'
-    " works even over line breaks.";
+      'concatenation'
+      " works even over line breaks.";
   print(s5);
 
   var s6 = 'The + operator ' + 'works, as well.';
@@ -81,10 +83,81 @@ void strings(){
   //在字符串前加上 r 作为前缀创建 “raw” 字符串（即不会被做任何处理（比如转义）的字符串）
   var s9 = r'In a raw string, not even \n gets special treatment.';
   print(s9);
-
 }
 
-void main(){
+//不允许使用类似 if (nonbooleanValue) 或者 assert (nonbooleanValue) 这样的代码检查布尔值
+//相反，应显示地检查布尔值
+void booleans() {
+  // Check for an empty string.
+  var fullName = '';
+  assert(fullName.isEmpty);
+
+// Check for zero.
+  var hitPoints = 0;
+  assert(hitPoints <= 0);
+
+// Check for null.
+  var unicorn;
+  assert(unicorn == null);
+
+// Check for NaN.
+  var iMeantToDoThis = 0 / 0;
+  assert(iMeantToDoThis.isNaN);
+}
+
+void lists() {
+  //这里 Dart 推断出 list 的类型为 List<int>，如果往该数组中添加一个非 int 类型的对象则会报错
+  var list = [1, 2, 3];
+  assert(list.length == 3);
+  assert(list[1] == 2);
+
+  list[1] = 1;
+  assert(list[1] == 1);
+
+  var list2 = [0, ...list];
+  assert(list2.length == 4);
+}
+
+void sets() {
+  var halogens = {'fluorine', 'chlorine', 'bromine', 'iodine', 'astatine'};
+
+  var names = <String>{};
+  // Set<String> names = {}; // This works, too.
+  // var names = {}; // Creates a map, not a set.
+
+  var elements = <String>{};
+  elements.add('fluorine');
+  elements.addAll(halogens);
+  print(elements);
+  assert(elements.length == 6);
+}
+
+void maps() {
+  var gifts = {
+    // Key:    Value
+    'first': 'partridge',
+    'second': 'turtledoves',
+    'fifth': 'golden rings'
+  };
+
+  var nobleGases = {
+    2: 'helium',
+    10: 'neon',
+    18: 'argon',
+  };
+
+  //如果你向这两个 Map 对象中添加不正确的类型值，将导致运行时异常
+  gifts['fourth'] = 'calling birds';
+
+  //如果检索的 Key 不存在于 Map 中则会返回一个 null
+  assert(gifts['fifth'] == 'null');
+}
+
+void main() {
   numbers();
   strings();
+  booleans();
+  lists();
+  sets();
+  maps();
 }
