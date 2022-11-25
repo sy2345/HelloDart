@@ -204,8 +204,7 @@ void collections() {
   // Maps can be built from a constructor.
   var searchTerms = Map();
 
-  // Maps are parameterized types; you can specify what
-  // types the key and value should be.
+  // Maps are parameterized types; you can specify what types the key and value should be.
   var nobleGases1 = {54: 'xenon'};
 
   // Retrieve a value with a key.
@@ -215,7 +214,7 @@ void collections() {
   assert(nobleGases1.containsKey(54));
 
   // Remove a key and its value.
-  nobleGases.remove(54);
+  nobleGases1.remove(54);
   assert(!nobleGases1.containsKey(54));
 
 //公共集合方法
@@ -233,8 +232,126 @@ void collections() {
     */
 }
 
+//Uri 类 提供对字符串的编解码操作
+void uris() {
+//编码和解码完整合法的URI
+  var uri = 'https://example.org/api?foo=some message';
+
+  var encoded = Uri.encodeFull(uri);
+  assert(encoded == 'https://example.org/api?foo=some%20message');
+
+  var decoded = Uri.decodeFull(encoded);
+  assert(uri == decoded);
+//解析 URI
+  var uri_1 = Uri.parse('https://example.org:8080/foo/bar#frag');
+
+  assert(uri_1.scheme == 'https');
+  assert(uri_1.host == 'example.org');
+  assert(uri_1.path == '/foo/bar');
+  assert(uri_1.fragment == 'frag');
+  assert(uri_1.origin == 'https://example.org:8080');
+}
+
+//DateTime 对象代表某个时刻，时区可以是 UTC 或者本地时区
+void dates_and_times() {
+  // Get the current date and time.
+  var now = DateTime.now();
+  print(now);
+
+  // Create a new DateTime with the local time zone.
+  var y2k = DateTime(2000); // January 1, 2000
+  print(y2k);
+
+  // Specify the month and day.
+  y2k = DateTime(2000, 1, 2); // January 2, 2000
+  print(y2k);
+
+  // Specify the date as a UTC time.
+  y2k = DateTime.utc(2000); // 1/1/2000, UTC
+  print(y2k);
+
+  // Specify a date and time in ms since the Unix epoch.
+  y2k = DateTime.fromMillisecondsSinceEpoch(946684800000, isUtc: true);
+  print(y2k);
+
+  // Parse an ISO 8601 date.
+  y2k = DateTime.parse('2000-01-01T00:00:00Z');
+  print(y2k);
+
+  // Add one year.
+  var y2001 = y2k.add(const Duration(days: 366));
+  assert(y2001.year == 2001);
+
+  // Subtract 30 days.
+  var december2000 = y2001.subtract(const Duration(days: 30));
+  assert(december2000.year == 2000);
+  assert(december2000.month == 12);
+
+  // Calculate the difference between two dates.
+  // Returns a Duration object.
+  var duration = y2001.difference(y2k);
+  assert(duration.inDays == 366); // y2k was a leap year.
+}
+
+//核心库包含各种工具类，可用于排序，映射值以及迭代
+//比较对象
+class Line implements Comparable<Line> {
+  final int length;
+  const Line(this.length);
+
+  @override
+  int compareTo(Line other) => length - other.length;
+}
+
+class Person {
+  final String firstName, lastName;
+
+  Person(this.firstName, this.lastName);
+
+  // Override hashCode using the static hashing methods
+  // provided by the `Object` class.
+  @override
+  int get hashCode => Object.hash(firstName, lastName);
+
+  // You should generally implement operator `==` if you
+  // override `hashCode`.
+  @override
+  bool operator ==(dynamic other) {
+    return other is Person &&
+        other.firstName == firstName &&
+        other.lastName == lastName;
+  }
+}
+
+//异常
+//异常通常是一些可以预见和预知的情况,错误是无法预见或者预防的情况
+//通常通过抛出一个应用特定的异常，来表示应用发生了错误
+/*
+class FooException implements Exception {
+  final String? msg;
+
+  const FooException([this.msg]);
+
+  @override
+  String toString() => msg ?? 'FooException';
+}
+*/
+
 void main(List<String> args) {
   print_to_console();
   numbers();
   collections();
+  uris();
+  dates_and_times();
+
+  var short = const Line(1);
+  var long = const Line(100);
+  assert(short.compareTo(long) < 0);
+
+  var p1 = Person('Bob', 'Smith');
+  var p2 = Person('Bob', 'Smith');
+  var p3 = 'not a person';
+  assert(p1.hashCode == p2.hashCode);
+  assert(p1 == p2);
+  assert(p1 != p3);
 }
